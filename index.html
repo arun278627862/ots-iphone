@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>OTS iPhone Scanner | Waaree Energies</title>
+    
+    <!-- PWA & Mobile Web Capabilities -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="OTS Scanner">
+    <meta name="theme-color" content="#820c59">
+
+    <!-- Tailwind CSS (Clean CDN for GitHub Pages) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Html5Qrcode Scanner Engine -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --sat: env(safe-area-inset-top, 0px);
+            --sab: env(safe-area-inset-bottom, 0px);
+            --waaree-purple: #820c59;
+            --waaree-gold: #f59e0b;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .safe-top { padding-top: max(var(--sat), 0.75rem); }
+        .safe-bottom { padding-bottom: max(var(--sab), 0.75rem); }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .viewfinder-wrapper {
+            position: relative;
+            width: 100%;
+            height: 290px;
+            overflow: hidden;
+            border-radius: 1.25rem;
+            background: #000000;
+            border: 2px solid rgba(130, 12, 89, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        #qr-reader {
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
+        }
+        #qr-reader video {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            border-radius: 1.25rem !important;
+        }
+
+        /* Animated Laser Scanning Line */
+        .scan-laser {
+            position: absolute;
+            left: 5%;
+            width: 90%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ec4899, #f59e0b, transparent);
+            box-shadow: 0 0 15px #ec4899;
+            animation: scanLaser 2s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        @keyframes scanLaser {
+            0% { top: 8%; opacity: 0.2; }
+            50% { top: 88%; opacity: 1; }
+            100% { top: 8%; opacity: 0.2; }
+        }
+
+        /* HUD modal animations */
+        .hud-popup {
+            animation: hudPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes hudPop {
+            0% { transform: scale(0.85) translateY(20px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- ======================================================== -->
+    <!-- 1. LOGIN SHIELD OVERLAY (If Not Logged In)               -->
+    <!-- ======================================================== -->
+    <div id="loginOverlay" class="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-5">
+        <div class="w-full max-w-sm glass-panel p-6 rounded-2xl shadow-2xl border border-slate-700/80">
+            <!-- Brand Logo & Header -->
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#820c59] to-pink-600 shadow-lg shadow-purple-900/50 mb-3">
+                    <i class="fas fa-qrcode text-white text-3xl"></i>
+                </div>
+                <h1 class="text-xl font-black text-white tracking-tight">Waaree OTS</h1>
+                <p class="text-xs text-purple-300 font-semibold uppercase tracking-wider mt-0.5">iPhone Camera Entry Portal</p>
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold mt-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Direct Supabase Cloud Connected
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wider">Supervisor / Employee ID</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                            <i class="fas fa-user text-sm"></i>
+                        </span>
+                        <input type="text" id="loginIdentifier" required autocomplete="username" placeholder="e.g. 18001543 or ADMIN"
+                            class="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#820c59] focus:ring-1 focus:ring-[#820c59]">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wider">Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                            <i class="fas fa-lock text-sm"></i>
+                        </span>
+                        <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••"
+                            class="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#820c59] focus:ring-1 focus:ring-[#820c59]">
+                    </div>
+                </div>
+
+                <div id="loginErrorMsg" class="hidden text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-lg p-2.5 text-center font-semibold"></div>
+
+                <button type="submit" id="loginSubmitBtn"
+                    class="w-full py-3 px-4 rounded-xl font-extrabold text-sm text-white bg-gradient-to-r from-[#820c59] to-pink-600 hover:from-purple-900 hover:to-pink-700 active:scale-95 transition-all shadow-lg shadow-purple-900/40 flex items-center justify-center gap-2">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Login & Start Camera</span>
+                </button>
+            </form>
+
+            <div class="mt-5 text-center">
+                <p class="text-[11px] text-slate-500 font-medium">100% Antivirus Safe & iOS Native Approved</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 2. MAIN APPLICATION INTERFACE (Active When Authenticated)-->
+    <!-- ======================================================== -->
+    
+    <!-- Top Header -->
+    <header class="safe-top px-4 py-2 glass-panel border-b border-slate-800 sticky top-0 z-30">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#820c59] to-pink-600 flex items-center justify-center shadow-md">
+                    <i class="fas fa-qrcode text-white text-sm"></i>
+                </div>
+                <div>
+                    <h2 class="text-sm font-black text-white leading-tight">OTS Scanner</h2>
+                    <p id="headerUserInfo" class="text-[10px] text-purple-300 font-bold uppercase truncate max-w-[170px]">Connecting...</p>
+                </div>
+            </div>
+
+            <!-- Header Action Controls -->
+            <div class="flex items-center gap-2">
+                <div class="px-2 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-[10px] font-extrabold flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span id="shiftBadgeDisplay">Shift</span>
+                </div>
+                <button id="logoutBtn" title="Logout" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 active:scale-90 text-slate-300 flex items-center justify-center border border-slate-700 text-xs">
+                    <i class="fas fa-power-off"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content Workspace -->
+    <main class="flex-1 max-w-md w-full mx-auto px-4 py-3 flex flex-col gap-3">
+        
+        <!-- Line Selector Panel -->
+        <div class="glass-panel p-3 rounded-2xl border border-slate-800">
+            <div class="flex items-center justify-between mb-1.5">
+                <label for="lineSelect" class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                    <i class="fas fa-layer-group text-purple-400"></i>
+                    <span>Production Line</span>
+                </label>
+                <span id="lineCountLabel" class="text-[10px] text-slate-400 font-semibold">Loading lines...</span>
+            </div>
+            
+            <div class="relative">
+                <select id="lineSelect" class="w-full py-2.5 pl-3 pr-8 rounded-xl bg-slate-900 border-2 border-purple-500/50 text-white font-extrabold text-sm appearance-none focus:outline-none focus:border-pink-500">
+                    <option value="" disabled selected>-- Select Production Line --</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-purple-400">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Camera Scanner Card -->
+        <div class="glass-panel p-3 rounded-2xl border border-slate-800 flex flex-col gap-2">
+            
+            <div class="viewfinder-wrapper" id="scannerWrapper">
+                <div id="qr-reader"></div>
+                <div class="scan-laser" id="laserBeam"></div>
+                
+                <!-- Start Camera Button Overlay (If iOS blocks auto-permission) -->
+                <div id="startOverlay" class="absolute inset-0 z-30 bg-black/80 flex flex-col items-center justify-center p-4 text-center hidden">
+                    <div class="w-14 h-14 rounded-full bg-[#820c59] flex items-center justify-center mb-3 shadow-lg shadow-purple-900/50">
+                        <i class="fas fa-camera text-white text-xl"></i>
+                    </div>
+                    <p class="text-sm font-bold text-white mb-3">Allow Camera on iPhone</p>
+                    <button id="startCameraBtn" class="px-5 py-2.5 rounded-xl font-extrabold text-xs text-white bg-gradient-to-r from-[#820c59] to-pink-600 active:scale-95 shadow-lg">
+                        Tap to Start Camera
+                    </button>
+                </div>
+            </div>
+
+            <!-- Viewfinder Toolbar -->
+            <div class="flex items-center justify-between px-1 text-xs">
+                <div class="flex items-center gap-1.5 text-slate-300 font-bold text-[11px]">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span id="scannerStatus">Scanner Active</span>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <button id="flipCameraBtn" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 active:scale-95 border border-slate-700 text-slate-200 text-[11px] font-bold flex items-center gap-1">
+                        <i class="fas fa-camera-rotate"></i>
+                        <span>Flip</span>
+                    </button>
+                    <button id="toggleTorchBtn" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 active:scale-95 border border-slate-700 text-slate-200 text-[11px] font-bold flex items-center gap-1">
+                        <i class="fas fa-bolt"></i>
+                        <span id="torchLabel">Torch</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manual Punch Option -->
+        <div class="glass-panel p-2.5 rounded-xl border border-slate-800 flex items-center gap-2">
+            <input type="text" id="manualEmpInput" placeholder="Manual Emp No (e.g. 11014737)" 
+                class="flex-1 py-1.5 px-3 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs placeholder-slate-500 font-bold focus:outline-none focus:border-purple-500">
+            <button id="manualPunchBtn" class="px-4 py-1.5 rounded-lg bg-[#820c59] text-white text-xs font-extrabold hover:bg-pink-700 active:scale-95 transition-all">
+                Punch
+            </button>
+        </div>
+
+        <!-- Session Scans List -->
+        <div class="glass-panel p-3 rounded-2xl border border-slate-800 flex-1 flex flex-col min-h-[140px]">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <i class="fas fa-clock-rotate-left text-purple-400"></i>
+                    <span>This Session's Punches</span>
+                </span>
+                <span id="sessionPunchesCount" class="text-[10px] px-2 py-0.5 rounded-full bg-purple-900/50 text-purple-300 font-extrabold border border-purple-700/50">0 Scanned</span>
+            </div>
+
+            <div id="recentScansContainer" class="flex-1 overflow-y-auto space-y-2 max-h-[200px] pr-1">
+                <div class="text-center py-6 text-slate-500 text-xs">
+                    <i class="fas fa-barcode text-slate-600 text-xl mb-1.5 block"></i>
+                    <span>No cards scanned yet in this session.</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Status Bar -->
+    <footer class="safe-bottom px-4 py-2 glass-panel border-t border-slate-800 text-[10px] text-slate-400 flex items-center justify-between">
+        <span class="flex items-center gap-1">
+            <i class="fas fa-shield-halved text-emerald-400"></i>
+            <span>Supabase Sync Active</span>
+        </span>
+        <span id="liveClockDisplay" class="font-mono text-slate-300 font-bold">--:--:--</span>
+    </footer>
+
+    <!-- ======================================================== -->
+    <!-- 3. SCAN RESULT HUD POPUP                                 -->
+    <!-- ======================================================== -->
+    <div id="scanHudOverlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div id="scanHudBox" class="w-full max-w-xs bg-slate-900 border-2 rounded-2xl p-5 shadow-2xl text-center hud-popup">
+            <div id="hudIconWrapper" class="w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-3 text-2xl shadow-lg"></div>
+            <h3 id="hudTitle" class="text-lg font-black text-white mb-0.5">Punch Success</h3>
+            <p id="hudEmpName" class="text-sm font-extrabold text-purple-300 mb-1">Employee Name</p>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-xs font-bold text-slate-200 mb-2">
+                <span id="hudEmpNo">11014737</span> • <span id="hudLine">Line</span>
+            </div>
+            <p id="hudSubtext" class="text-xs text-slate-400 mb-4">Saved directly to Supabase cloud</p>
+            <button id="hudCloseBtn" class="w-full py-2.5 rounded-xl font-black text-xs text-white bg-slate-800 hover:bg-slate-700 active:scale-95 transition-all">
+                Scan Next Card
+            </button>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 4. JAVASCRIPT APPLICATION CORE                           -->
+    <!-- ======================================================== -->
+    <script>
+        // CONFIG & STATE
+        let CONFIG = null;
+        let currentUser = null;
+        let activeLine = null;
+        let html5QrCode = null;
+        let isScannerRunning = false;
+        let isProcessing = false;
+        let torchActive = false;
+        let availableCameras = [];
+        let activeCameraId = null;
+        const sessionPunches = [];
+
+        // SHA-256 for secure client-side password verification
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // 1. INITIALIZE & LOAD CLOUD MANIFEST
+        async function initializeApp() {
+            try {
+                const res = await fetch('ots_cloud_data.json?v=' + Date.now());
+                if (!res.ok) throw new Error('Could not load ots_cloud_data.json');
+                CONFIG = await res.json();
+                
+                populateLines(CONFIG.lines || []);
+                checkExistingLogin();
+                initClock();
+            } catch (err) {
+                console.error('Initialization error:', err);
+                document.getElementById('lineCountLabel').textContent = 'Error loading data';
+            }
+        }
+
+        // 2. POPULATE PRODUCTION LINES
+        function populateLines(lines) {
+            const select = document.getElementById('lineSelect');
+            select.innerHTML = '<option value="" disabled selected>-- Select Production Line --</option>';
+            lines.forEach(line => {
+                const opt = document.createElement('option');
+                opt.value = line;
+                opt.textContent = line;
+                select.appendChild(opt);
+            });
+            document.getElementById('lineCountLabel').textContent = `${lines.length} lines available`;
+
+            const savedLine = localStorage.getItem('ots_iphone_selected_line');
+            if (savedLine && lines.includes(savedLine)) {
+                select.value = savedLine;
+                activeLine = savedLine;
+            }
+
+            select.addEventListener('change', () => {
+                activeLine = select.value;
+                localStorage.setItem('ots_iphone_selected_line', activeLine);
+            });
+        }
+
+        // 3. AUTHENTICATION (SUPERVISOR LOGIN)
+        function checkExistingLogin() {
+            const stored = localStorage.getItem('ots_iphone_user');
+            if (stored) {
+                try {
+                    currentUser = JSON.parse(stored);
+                    grantAccess();
+                    return;
+                } catch (_) {}
+            }
+            showLogin();
+        }
+
+        function showLogin() {
+            document.getElementById('loginOverlay').classList.remove('hidden');
+        }
+
+        function grantAccess() {
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('headerUserInfo').textContent = `${currentUser.name} (${currentUser.identifier})`;
+            initCamera();
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const ident = document.getElementById('loginIdentifier').value.trim().toUpperCase();
+            const pass = document.getElementById('loginPassword').value.trim();
+            const errBox = document.getElementById('loginErrorMsg');
+
+            if (!CONFIG || !CONFIG.users) {
+                errBox.textContent = 'Configuration still loading. Please retry.';
+                errBox.classList.remove('hidden');
+                return;
+            }
+
+            const user = CONFIG.users[ident];
+            if (!user) {
+                errBox.textContent = 'Invalid ID. Check supervisor identifier.';
+                errBox.classList.remove('hidden');
+                return;
+            }
+
+            const inputHash = await sha256(pass);
+            if (user.hash !== inputHash) {
+                errBox.textContent = 'Incorrect password. Please try again.';
+                errBox.classList.remove('hidden');
+                return;
+            }
+
+            // Success
+            errBox.classList.add('hidden');
+            currentUser = {
+                identifier: ident,
+                name: user.name,
+                type: user.type,
+                depts: user.depts
+            };
+            localStorage.setItem('ots_iphone_user', JSON.stringify(currentUser));
+            grantAccess();
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('Logout from OTS iPhone Scanner?')) {
+                localStorage.removeItem('ots_iphone_user');
+                location.reload();
+            }
+        });
+
+        // 4. SHIFT & TIME ENGINE
+        function getCurrentShiftIST() {
+            const now = new Date();
+            const istParts = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Asia/Kolkata',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: false
+            }).formatToParts(now);
+
+            let hour = 0, minutes = 0;
+            for (const part of istParts) {
+                if (part.type === 'hour') hour = parseInt(part.value, 10);
+                if (part.type === 'minute') minutes = parseInt(part.value, 10);
+            }
+            if (hour === 24) hour = 0;
+            const totalMinutes = hour * 60 + minutes;
+
+            if (totalMinutes >= 420 && totalMinutes < 930) return 'A'; // 07:00 - 15:30
+            if (totalMinutes >= 930 && totalMinutes < 1440) return 'B'; // 15:30 - 24:00
+            return 'C'; // 00:00 - 07:00
+        }
+
+        function initClock() {
+            function update() {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour12: false });
+                document.getElementById('liveClockDisplay').textContent = timeStr + ' IST';
+                document.getElementById('shiftBadgeDisplay').textContent = 'Shift ' + getCurrentShiftIST();
+            }
+            update();
+            setInterval(update, 1000);
+        }
+
+        // 5. SOUND & HAPTIC SYSTEM
+        function playTone(type) {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'success') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(880, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.12);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.15);
+                } else {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.2);
+                }
+            } catch (_) {}
+
+            if (navigator.vibrate) {
+                navigator.vibrate(type === 'success' ? [40] : [100, 50, 100]);
+            }
+        }
+
+        // 6. CAMERA SCANNER ENGINE (Html5Qrcode)
+        async function initCamera() {
+            try {
+                html5QrCode = new Html5Qrcode("qr-reader");
+                availableCameras = await Html5Qrcode.getCameras().catch(() => []);
+                
+                await startScanning({ facingMode: "environment" });
+            } catch (err) {
+                console.warn('Camera auto-start prevented. Showing button:', err);
+                document.getElementById('startOverlay').classList.remove('hidden');
+            }
+
+            document.getElementById('startCameraBtn').addEventListener('click', async () => {
+                document.getElementById('startOverlay').classList.add('hidden');
+                await startScanning({ facingMode: "environment" });
+            });
+        }
+
+        async function startScanning(cameraConfig) {
+            if (isScannerRunning) return;
+            try {
+                await html5QrCode.start(
+                    cameraConfig,
+                    {
+                        fps: 15,
+                        qrbox: { width: 220, height: 220 },
+                        aspectRatio: 1.0,
+                        formatsToSupport: [
+                            Html5QrcodeSupportedFormats.QR_CODE,
+                            Html5QrcodeSupportedFormats.CODE_128,
+                            Html5QrcodeSupportedFormats.CODE_39,
+                            Html5QrcodeSupportedFormats.EAN_13
+                        ]
+                    },
+                    onBarcodeDetected,
+                    () => {}
+                );
+                isScannerRunning = true;
+                document.getElementById('scannerStatus').textContent = 'Scanner Active';
+            } catch (err) {
+                console.error('Camera start failed:', err);
+                document.getElementById('startOverlay').classList.remove('hidden');
+            }
+        }
+
+        // Camera Toolbar Actions
+        document.getElementById('flipCameraBtn').addEventListener('click', async () => {
+            if (!html5QrCode || !isScannerRunning) return;
+            await html5QrCode.stop();
+            isScannerRunning = false;
+            if (availableCameras.length > 1) {
+                const curIdx = availableCameras.findIndex(c => c.id === activeCameraId);
+                const nextIdx = (curIdx + 1) % availableCameras.length;
+                activeCameraId = availableCameras[nextIdx].id;
+                await startScanning(activeCameraId);
+            } else {
+                await startScanning({ facingMode: "user" });
+            }
+        });
+
+        document.getElementById('toggleTorchBtn').addEventListener('click', async () => {
+            if (!isScannerRunning || !html5QrCode) return;
+            try {
+                torchActive = !torchActive;
+                await html5QrCode.applyVideoConstraints({ advanced: [{ torch: torchActive }] });
+                document.getElementById('torchLabel').textContent = torchActive ? 'Flash ON' : 'Torch';
+            } catch (_) {
+                alert('Flash not supported on this lens');
+            }
+        });
+
+        // 7. QR CODE DETECTED EVENT
+        async function onBarcodeDetected(decodedText) {
+            if (isProcessing) return;
+            const cleaned = decodedText.trim();
+            if (!cleaned) return;
+
+            isProcessing = true;
+            await processPunch(cleaned);
+            
+            // Debounce 2 seconds
+            setTimeout(() => { isProcessing = false; }, 2000);
+        }
+
+        // Manual Punch
+        document.getElementById('manualPunchBtn').addEventListener('click', async () => {
+            const input = document.getElementById('manualEmpInput');
+            const val = input.value.trim();
+            if (!val) return;
+            input.value = '';
+            await processPunch(val);
+        });
+
+        // 8. PROCESS ATTENDANCE PUNCH (Direct to Supabase)
+        async function processPunch(empNo) {
+            if (!activeLine) {
+                playTone('error');
+                showHud({
+                    success: false,
+                    title: 'Line Required',
+                    empNo: empNo,
+                    subtext: 'Please select a production line first.'
+                });
+                return;
+            }
+
+            // Lookup employee name & department from manifest
+            const empInfo = (CONFIG && CONFIG.employees && CONFIG.employees[empNo]) ? CONFIG.employees[empNo] : null;
+            const empName = empInfo ? empInfo.name : empNo;
+            const empDept = empInfo ? empInfo.department : 'Cell Production';
+
+            try {
+                document.getElementById('scannerStatus').textContent = 'Submitting...';
+
+                // 1. Get max id from Supabase to prevent primary key collision
+                const maxUrl = `${CONFIG.supabase_url}/rest/v1/attendance?select=id&order=id.desc&limit=1`;
+                const maxRes = await fetch(maxUrl, {
+                    headers: { 'apikey': CONFIG.supabase_key, 'Authorization': `Bearer ${CONFIG.supabase_key}` }
+                });
+                const maxData = await maxRes.json();
+                const nextId = (maxData && maxData.length > 0 && maxData[0].id) ? (maxData[0].id + 1) : Date.now();
+
+                // 2. Prepare payload
+                const nowIso = new Date().toISOString();
+                const payload = {
+                    id: nextId,
+                    timestamp: nowIso,
+                    emp_no: String(empNo),
+                    name: empName,
+                    department: empDept,
+                    line: activeLine,
+                    recorded_by: currentUser ? currentUser.name : 'iPhone Remote',
+                    attendance_type: 'Main'
+                };
+
+                // 3. Insert into Supabase
+                const postUrl = `${CONFIG.supabase_url}/rest/v1/attendance`;
+                const postRes = await fetch(postUrl, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': CONFIG.supabase_key,
+                        'Authorization': `Bearer ${CONFIG.supabase_key}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!postRes.ok) throw new Error(`Supabase error ${postRes.status}`);
+
+                // Success
+                playTone('success');
+                showHud({
+                    success: true,
+                    title: 'Present Marked!',
+                    name: empName,
+                    empNo: empNo,
+                    line: activeLine,
+                    subtext: 'Synchronized with Plant Main Server'
+                });
+
+                addSessionRecord({
+                    empNo: empNo,
+                    name: empName,
+                    line: activeLine,
+                    time: new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour12: false })
+                });
+
+            } catch (err) {
+                console.error('Punch error:', err);
+                playTone('error');
+                showHud({
+                    success: false,
+                    title: 'Network Error',
+                    empNo: empNo,
+                    subtext: 'Check iPhone internet connection'
+                });
+            } finally {
+                document.getElementById('scannerStatus').textContent = 'Scanner Active';
+            }
+        }
+
+        // 9. HUD POPUP RENDERER
+        function showHud(data) {
+            const overlay = document.getElementById('scanHudOverlay');
+            const box = document.getElementById('scanHudBox');
+            const iconWrap = document.getElementById('hudIconWrapper');
+            const title = document.getElementById('hudTitle');
+            const empName = document.getElementById('hudEmpName');
+            const empNo = document.getElementById('hudEmpNo');
+            const line = document.getElementById('hudLine');
+            const subtext = document.getElementById('hudSubtext');
+
+            if (data.success) {
+                box.className = 'w-full max-w-xs bg-slate-900 border-2 border-emerald-500 rounded-2xl p-5 shadow-2xl text-center hud-popup';
+                iconWrap.className = 'w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-3 text-2xl shadow-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+                iconWrap.innerHTML = '<i class="fas fa-check"></i>';
+                title.textContent = data.title;
+                empName.textContent = data.name || data.empNo;
+                empNo.textContent = data.empNo;
+                line.textContent = data.line;
+                subtext.textContent = data.subtext;
+            } else {
+                box.className = 'w-full max-w-xs bg-slate-900 border-2 border-rose-500 rounded-2xl p-5 shadow-2xl text-center hud-popup';
+                iconWrap.className = 'w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-3 text-2xl shadow-lg bg-rose-500/20 text-rose-400 border border-rose-500/30';
+                iconWrap.innerHTML = '<i class="fas fa-triangle-exclamation"></i>';
+                title.textContent = data.title;
+                empName.textContent = data.empNo;
+                empNo.textContent = data.empNo;
+                line.textContent = activeLine || 'No Line';
+                subtext.textContent = data.subtext;
+            }
+
+            overlay.classList.remove('hidden');
+
+            // Auto-hide after 2.5s
+            clearTimeout(window.hudTimer);
+            window.hudTimer = setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 2500);
+        }
+
+        document.getElementById('hudCloseBtn').addEventListener('click', () => {
+            document.getElementById('scanHudOverlay').classList.add('hidden');
+        });
+
+        // 10. SESSION PUNCHES LIST
+        function addSessionRecord(rec) {
+            sessionPunches.unshift(rec);
+            document.getElementById('sessionPunchesCount').textContent = `${sessionPunches.length} Scanned`;
+            
+            const container = document.getElementById('recentScansContainer');
+            container.innerHTML = sessionPunches.map(p => `
+                <div class="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between text-xs">
+                    <div>
+                        <p class="font-extrabold text-white text-[13px] leading-tight">${p.name}</p>
+                        <p class="text-[10px] text-purple-300 font-bold">${p.empNo} • ${p.line}</p>
+                    </div>
+                    <span class="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded-md border border-slate-800">${p.time}</span>
+                </div>
+            `).join('');
+        }
+
+        // Start
+        window.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
