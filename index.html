@@ -233,6 +233,76 @@
         .safe-bottom {
             padding-bottom: max(var(--sab), 1.25rem);
         }
+
+        /* =============================================
+           TAILWIND v2 CDN FALLBACKS
+           JIT-only utilities don't work in the CDN build.
+           We define them here so the UI renders correctly.
+           ============================================= */
+
+        /* Arbitrary text sizes */
+        .text-\[8px\]   { font-size: 8px !important; }
+        .text-\[8\.5px\]{ font-size: 8.5px !important; }
+        .text-\[9px\]   { font-size: 9px !important; }
+        .text-\[10px\]  { font-size: 10px !important; }
+        .text-\[11px\]  { font-size: 11px !important; }
+
+        /* Shadow utilities missing in v2 CDN */
+        .shadow-xs  { box-shadow: 0 1px 2px 0 rgba(0,0,0,.05); }
+        .shadow-2xs { box-shadow: 0 0.5px 1px 0 rgba(0,0,0,.04); }
+
+        /* Backdrop blur (not in v2 CDN) */
+        .backdrop-blur-sm { -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+        .backdrop-blur-md { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+
+        /* bg-[color]/opacity slash syntax fallbacks */
+        .bg-slate-900\/90  { background-color: rgba(15,23,42,.9); }
+        .bg-slate-950\/90  { background-color: rgba(2,6,23,.9); }
+        .bg-black\/60      { background-color: rgba(0,0,0,.6); }
+        .bg-black\/80      { background-color: rgba(0,0,0,.8); }
+        .bg-black\/20      { background-color: rgba(0,0,0,.2); }
+        .bg-white\/20      { background-color: rgba(255,255,255,.2); }
+        .bg-white\/15      { background-color: rgba(255,255,255,.15); }
+
+        /* Border with opacity */
+        .border-white\/15  { border-color: rgba(255,255,255,.15); }
+        .border-white\/25  { border-color: rgba(255,255,255,.25); }
+
+        /* Text with opacity */
+        .text-white\/95    { color: rgba(255,255,255,.95); }
+        .text-purple-200\/80 { color: rgba(196,181,253,.8); }
+
+        /* bg gradient partials */
+        .from-blue-50\/60  { --tw-gradient-from: rgba(239,246,255,.6); }
+        .to-purple-50\/60  { --tw-gradient-to: rgba(250,245,255,.6); }
+
+        /* Arbitrary bracket colors used in classes */
+        .bg-\[\#820c59\]   { background-color: #820c59 !important; }
+        .from-\[\#820c59\] { --tw-gradient-from: #820c59; }
+        .to-\[\#5a083d\]   { --tw-gradient-to: #5a083d; }
+        .text-\[\#820c59\] { color: #820c59 !important; }
+        .focus\:border-\[\#820c59\]:focus { border-color: #820c59 !important; }
+        .focus\:ring-\[\#820c59\]:focus   { --tw-ring-color: #820c59; }
+
+        /* Responsive sm: prefix fallbacks for small text */
+        @media (min-width: 640px) {
+            .sm\:text-sm   { font-size: 0.875rem; line-height: 1.25rem; }
+            .sm\:text-\[9px\]  { font-size: 9px !important; }
+            .sm\:text-\[11px\] { font-size: 11px !important; }
+            .sm\:max-w-\[120px\] { max-width: 120px; }
+            .sm\:h-7 { height: 1.75rem; }
+        }
+
+        /* max-w arbitrary */
+        .max-w-\[100px\] { max-width: 100px; }
+        .max-w-\[120px\] { max-width: 120px; }
+
+        /* scale / translate utilities */
+        .active\:scale-95:active  { transform: scale(.95); }
+        .active\:scale-90:active  { transform: scale(.90); }
+        .active\:scale-96:active  { transform: scale(.96); }
+        .hover\:brightness-110:hover { filter: brightness(1.1); }
+        .hover\:brightness-95:hover  { filter: brightness(.95); }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -1128,8 +1198,8 @@
             try {
                 document.getElementById('scannerStatusText').textContent = 'Verifying...';
 
-                // 1. Query latest records for this employee today to detect Duplicate vs Line Transfer
-                const checkUrl = `${CONFIG.supabase_url}/rest/v1/attendance?emp_no=eq.${encodeURIComponent(String(empNo))}&order=id.desc&limit=5`;
+                // 1. Query latest records for this employee today to detect Duplicate vs Line Transfer (exclude DELETED)
+                const checkUrl = `${CONFIG.supabase_url}/rest/v1/attendance?emp_no=eq.${encodeURIComponent(String(empNo))}&attendance_type=neq.DELETED&order=id.desc&limit=5`;
                 const checkRes = await fetch(checkUrl, {
                     headers: { 'apikey': CONFIG.supabase_key, 'Authorization': `Bearer ${CONFIG.supabase_key}` },
                     cache: 'no-store'
@@ -1443,8 +1513,8 @@
             try {
                 const currentEffDate = getEffectiveShiftDateIST(new Date());
 
-                // Fetch latest 100 scans for this line from Supabase
-                const queryUrl = `${CONFIG.supabase_url}/rest/v1/attendance?line=eq.${encodeURIComponent(activeLine)}&order=id.desc&limit=100`;
+                // Fetch latest 100 scans for this line from Supabase (excluding DELETED)
+                const queryUrl = `${CONFIG.supabase_url}/rest/v1/attendance?line=eq.${encodeURIComponent(activeLine)}&attendance_type=neq.DELETED&order=id.desc&limit=100`;
                 const res = await fetch(queryUrl, {
                     headers: {
                         'apikey': CONFIG.supabase_key,
@@ -1636,8 +1706,8 @@
             try {
                 const currentEffDate = getEffectiveShiftDateIST(new Date());
 
-                // Fetch latest 1000 punches across all lines from Supabase
-                const url = `${CONFIG.supabase_url}/rest/v1/attendance?select=line,timestamp,emp_no&order=id.desc&limit=1000`;
+                // Fetch latest 1000 punches across all lines from Supabase (excluding DELETED)
+                const url = `${CONFIG.supabase_url}/rest/v1/attendance?attendance_type=neq.DELETED&select=line,timestamp,emp_no&order=id.desc&limit=1000`;
                 const res = await fetch(url, {
                     headers: {
                         'apikey': CONFIG.supabase_key,
