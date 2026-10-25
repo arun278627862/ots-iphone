@@ -119,19 +119,19 @@
         .nav-button:hover { filter: brightness(1.1); transform: translateY(-1px); }
         .nav-button:active { transform: scale(0.96); }
 
-        /* Camera Viewfinder Styling */
+        /* Camera Viewfinder Styling - Compact & Ergonomic */
         #scannerContainer {
             position: relative;
             width: 100%;
-            height: 290px;
+            height: 220px;
             overflow: hidden;
-            border-radius: 1rem;
+            border-radius: 0.85rem;
             background: #090d16;
         }
 
         @media (min-height: 750px) {
             #scannerContainer {
-                height: 320px;
+                height: 235px;
             }
         }
 
@@ -154,8 +154,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 210px;
-            height: 210px;
+            width: 165px;
+            height: 165px;
             pointer-events: none;
             z-index: 10;
         }
@@ -288,9 +288,7 @@
                 </button>
             </form>
 
-            <div class="mt-4 text-center">
-                <p class="text-[10px] text-slate-400 font-semibold">100% Antivirus Safe & iOS Native Approved</p>
-            </div>
+            
         </div>
     </div>
 
@@ -298,8 +296,8 @@
     <!-- 1. FULLSCREEN MOBILE APP HEADER BAR (Matches index.html) -->
     <!-- ======================================================== -->
     <header class="header-bar sticky top-0 z-40">
-        <div class="max-w-md w-full mx-auto px-3 py-2 flex items-center justify-between">
-            <div class="flex items-center gap-2 min-w-0">
+        <div class="max-w-md w-full mx-auto px-3 py-2 flex items-center justify-between gap-1.5">
+            <div class="flex items-center gap-1.5 flex-shrink-0">
                 <div class="bg-white p-1 px-1.5 rounded-lg shadow-xs border border-slate-200 flex-shrink-0">
                     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMMAAAA2CAYAAAB6IC0AAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+lpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDYuMC1jMDA2IDc5LmRhYmFjYmIsIDIwMjEvMDQvMTQtMDA6Mzk6NDQgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIyLjQgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMS0xMS0yMlQxMzoxNTowNiswNTozMCIgeG1wOk1vZGlmeURhdGU9IjIwMjEtMTEtMjJUMTM6NDk6MzcrMDU6MzAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjEtMTEtMjJUMTM6NDk6MzcrMDU6MzAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkVFODU5QTE0NEI2QzExRUNBNEUxQ0QwNTBFMTY4QUU2IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkVFODU5QTE1NEI2QzExRUNBNEUxQ0QwNTBFMTY4QUU2Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVm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" alt="Waaree" class="h-6 sm:h-7 object-contain">
                 </div>
@@ -315,22 +313,22 @@
 
             <div class="flex items-center gap-1.5 flex-shrink-0">
                 <!-- Logged-in Engineer Status Capsule (Matches index.html) -->
-                <div id="userCapsule" class="status-capsule max-w-[140px] truncate">
+                <div id="userCapsule" class="status-capsule">
                     <div class="status-dot flex-shrink-0"></div>
-                    <div class="flex flex-col text-left leading-none min-w-0">
-                        <span id="userNameDisplay" class="text-[10px] font-black text-slate-800 truncate">Connecting...</span>
-                        <span id="userRoleDisplay" class="text-[8px] text-purple-700 font-bold uppercase tracking-tighter truncate">Supervisor</span>
+                    <div class="flex flex-col text-left leading-tight min-w-0">
+                        <span id="userNameDisplay" class="text-[11px] font-black text-slate-800 truncate max-w-[100px] sm:max-w-[120px]">Connecting...</span>
+                        <span id="userRoleDisplay" class="text-[8.5px] text-purple-700 font-extrabold uppercase tracking-tight">Supervisor</span>
                     </div>
                 </div>
 
                 <!-- Refresh Data Button -->
-                <button id="refreshCloudBtn" title="Sync Cloud Data" class="nav-button bg-blue-600 text-white hover:bg-blue-700 p-2" onclick="refreshSupabaseData()">
-                    <i class="fas fa-sync-alt text-xs" id="cloudSyncIcon"></i>
+                <button id="refreshCloudBtn" title="Sync Cloud Data" class="w-7 h-7 rounded-lg bg-blue-600 hover:bg-blue-700 active:scale-90 text-white flex items-center justify-center text-xs transition shadow-xs" onclick="refreshSupabaseData()">
+                    <i class="fas fa-sync-alt text-[10px]" id="cloudSyncIcon"></i>
                 </button>
 
                 <!-- Logout Button -->
-                <button onclick="handleLogout()" class="nav-button bg-rose-600 text-white hover:bg-rose-700 p-2" title="Sign Out">
-                    <i class="fas fa-sign-out-alt text-xs"></i>
+                <button onclick="handleLogout()" class="w-7 h-7 rounded-lg bg-rose-600 hover:bg-rose-700 active:scale-90 text-white flex items-center justify-center text-xs transition shadow-xs" title="Sign Out">
+                    <i class="fas fa-power-off text-[10px]"></i>
                 </button>
             </div>
         </div>
@@ -385,6 +383,32 @@
             </div>
         </section>
 
+        <!-- SLIM PLANT CLOUDFLARE TUNNEL BAR (Minimal, Zero-Clutter) -->
+        <a id="tunnelDirectLink" href="#" target="_blank" rel="noopener noreferrer"
+           class="card px-3 py-2 border-slate-200 flex items-center justify-between gap-2 bg-gradient-to-r from-blue-50/60 to-purple-50/60 hover:brightness-95 transition shadow-2xs group" style="text-decoration: none;">
+            <div class="flex items-center gap-2 min-w-0">
+                <span class="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center text-[10px] flex-shrink-0 font-bold shadow-xs">
+                    <i class="fas fa-tower-broadcast"></i>
+                </span>
+                <div class="flex flex-col min-w-0 leading-tight">
+                    <span class="text-[9px] font-black uppercase tracking-wider text-slate-500">Plant Live Cloudflare Tunnel</span>
+                    <span id="tunnelHostnameText" class="text-xs font-extrabold text-blue-700 truncate group-hover:underline">
+                        Connecting tunnel...
+                    </span>
+                </div>
+            </div>
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+                <span id="tunnelStatusBadge" class="inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-300">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span id="tunnelStatusText">ONLINE</span>
+                </span>
+                <span class="text-blue-600 text-xs pl-0.5">
+                    <i class="fas fa-arrow-up-right-from-square"></i>
+                </span>
+            </div>
+        </a>
+
+
         <!-- CARD 2: LIVE CAMERA SCANNER -->
         <section class="card p-2.5 border-slate-200 relative overflow-hidden">
             <div class="flex items-center justify-between mb-2 px-1">
@@ -412,38 +436,38 @@
                 </div>
 
                 <!-- Touch to Start Overlay (Mandatory for iOS Safari) -->
-                <div id="startOverlay" class="absolute inset-0 z-20 flex flex-col items-center justify-center p-4 bg-slate-950/85 backdrop-blur-sm text-center">
-                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-[#820c59] to-pink-600 flex items-center justify-center text-white text-xl shadow-lg mb-2.5">
+                <div id="startOverlay" class="absolute inset-0 z-30 flex flex-col items-center justify-center p-4 bg-slate-950/90 backdrop-blur-sm text-center">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#820c59] to-pink-600 flex items-center justify-center text-white text-xl shadow-lg mb-2">
                         <i class="fas fa-camera"></i>
                     </div>
-                    <h3 class="text-white text-sm font-extrabold mb-1">Camera Permission</h3>
-                    <p class="text-purple-200/80 text-xs mb-3 max-w-xs">Tap below to grant camera access and start scanning on iPhone.</p>
+                    <h3 class="text-white text-xs font-black uppercase tracking-wider mb-1">Camera Access Required</h3>
+                    <p class="text-purple-200/80 text-[11px] mb-3 max-w-xs">Tap below to start camera scanner</p>
                     <button type="button" id="startCameraBtn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#820c59] to-pink-600 hover:brightness-110 active:scale-95 text-white text-xs font-extrabold shadow-lg transition flex items-center gap-2">
-                        <i class="fas fa-play"></i> Start Camera
+                        <i class="fas fa-play"></i> Launch Camera
                     </button>
                 </div>
 
                 <!-- Status pill at bottom of viewfinder -->
-                <div class="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 px-3 py-1 bg-black/75 backdrop-blur-md rounded-full border border-white/10 text-[10px] font-semibold text-slate-200 flex items-center gap-1.5 shadow">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <div id="viewfinderStatusPill" class="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 px-3 py-1 bg-black/80 backdrop-blur-md rounded-full border border-white/15 text-[10px] font-semibold text-slate-200 flex items-center gap-1.5 shadow">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                     <span>Align Barcode / QR Inside Reticle</span>
                 </div>
             </div>
 
             <!-- Mobile Action Toolbar (Flash / Flip / Type) -->
-            <div class="grid grid-cols-3 gap-2 mt-2 pt-0.5">
-                <button id="toggleTorchBtn" type="button" class="py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-white text-xs font-extrabold flex items-center justify-center gap-1.5 shadow-sm transition">
-                    <i class="fas fa-bolt"></i>
+            <div class="grid grid-cols-3 gap-2 mt-2">
+                <button id="toggleTorchBtn" type="button" class="py-2 px-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-white text-xs font-black flex items-center justify-center gap-1.5 shadow-sm transition">
+                    <i class="fas fa-bolt text-xs"></i>
                     <span id="torchLabel">Flash</span>
                 </button>
 
-                <button id="flipCameraBtn" type="button" class="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs font-extrabold flex items-center justify-center gap-1.5 shadow-sm transition">
-                    <i class="fas fa-camera-rotate"></i>
+                <button id="flipCameraBtn" type="button" class="py-2 px-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs font-black flex items-center justify-center gap-1.5 shadow-sm transition">
+                    <i class="fas fa-camera-rotate text-xs"></i>
                     <span>Flip Cam</span>
                 </button>
 
-                <button id="manualInputBtn" type="button" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-extrabold flex items-center justify-center gap-1.5 shadow-sm transition" onclick="openManualModal()">
-                    <i class="fas fa-keyboard"></i>
+                <button id="manualInputBtn" type="button" class="py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-black flex items-center justify-center gap-1.5 shadow-sm transition" onclick="openManualModal()">
+                    <i class="fas fa-keyboard text-xs"></i>
                     <span>Type ID</span>
                 </button>
             </div>
@@ -511,7 +535,61 @@
             </div>
         </section>
 
-    </main>
+    
+        <!-- CARD 4: ALL LINES SUMMARY TABLE (Matches index.html table exactly) -->
+        <section class="card p-3 border-slate-200">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-1.5 min-w-0">
+                    <div class="w-2.5 h-2.5 rounded-full bg-[#078746]"></div>
+                    <h2 class="text-xs font-black uppercase tracking-wider text-slate-800 truncate">
+                        Plant All Lines Summary
+                    </h2>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                    <span class="text-[10px] font-extrabold text-slate-500">
+                        Total: <span id="plantTotalPresentBadge" class="text-[#820c59] font-black">0</span>
+                    </span>
+                    <button type="button" onclick="fetchAllLinesSummaryFromSupabase()" title="Refresh All Lines" class="w-6 h-6 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-[10px] transition">
+                        <i class="fas fa-sync-alt" id="allLinesRefreshIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table Container with Horizontal / Vertical Scroll -->
+            <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-2xs max-h-64 overflow-y-auto">
+                <table class="w-full text-left text-xs border-collapse" style="font-size: 11px;">
+                    <thead class="bg-slate-100 text-slate-700 font-black sticky top-0 border-b border-slate-200 uppercase text-[9px] tracking-wider z-10">
+                        <tr>
+                            <th class="py-2 px-2.5 text-left">LINE</th>
+                            <th class="py-2 px-1 text-center text-blue-700 bg-blue-50/50">SHIFT A</th>
+                            <th class="py-2 px-1 text-center text-purple-700 bg-purple-50/50">SHIFT G</th>
+                            <th class="py-2 px-1 text-center text-emerald-700 bg-emerald-50/50">SHIFT B</th>
+                            <th class="py-2 px-1 text-center text-amber-700 bg-amber-50/50">SHIFT C</th>
+                            <th class="py-2 px-2 text-center text-slate-900 bg-slate-200/60 font-black">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allLinesTableBody" class="divide-y divide-slate-100 font-bold bg-white text-slate-700">
+                        <tr>
+                            <td colspan="6" class="p-3 text-center text-slate-400 italic">
+                                Loading latest plant line summary...
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="bg-slate-100 font-black text-slate-900 border-t-2 border-slate-300 text-[10px] sticky bottom-0">
+                        <tr id="allLinesTableFoot">
+                            <td class="py-2 px-2.5">TOTAL PLANT</td>
+                            <td id="footShiftA" class="py-2 px-1 text-center text-blue-800">0</td>
+                            <td id="footShiftG" class="py-2 px-1 text-center text-purple-800">0</td>
+                            <td id="footShiftB" class="py-2 px-1 text-center text-emerald-800">0</td>
+                            <td id="footShiftC" class="py-2 px-1 text-center text-amber-800">0</td>
+                            <td id="footGrandTotal" class="py-2 px-2 text-center text-[#820c59] bg-slate-200/80 font-black">0</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+
+</main>
 
     <!-- ======================================================== -->
     <!-- 4. OTS SCAN HUD POPUP (Matches index.html scanHudOverlay) -->
@@ -640,6 +718,10 @@
             initClock();
             populateLines(CONFIG.lines || []);
             checkExistingLogin();
+            fetchTunnelStatusFromSupabase();
+            fetchAllLinesSummaryFromSupabase();
+            setInterval(fetchAllLinesSummaryFromSupabase, 30000);
+            setInterval(fetchTunnelStatusFromSupabase, 15000);
         }
 
         // 2. SHIFT & TIME ENGINE (Exact formula matching index.html)
@@ -935,7 +1017,7 @@
                     cameraConfig,
                     {
                         fps: 15,
-                        qrbox: { width: 210, height: 210 },
+                        qrbox: { width: 165, height: 165 },
                         aspectRatio: 1.0,
                         formatsToSupport: [
                             Html5QrcodeSupportedFormats.QR_CODE,
@@ -1162,54 +1244,162 @@
             document.getElementById('hudOverlay').classList.add('hidden');
         }
 
-        // 10. REAL-TIME SHIFT ATTENDANCE SUMMARY & RECENT SCANS FROM SUPABASE
+        // ========================================================
+        // 10. REAL-TIME SHIFT ATTENDANCE SUMMARY & EXACT IST TIMING
+        // ========================================================
+        
+        // Helper to convert any Supabase UTC timestamp string to accurate IST Date object
+        function parseUtcToIst(utcStr) {
+            if (!utcStr) return new Date();
+            // Standardize format
+            let cleanStr = utcStr;
+            if (!cleanStr.includes('Z') && !cleanStr.includes('+')) {
+                cleanStr += '+00:00';
+            }
+            return new Date(cleanStr);
+        }
+
+        // Format Date object to exact IST 12-hour AM/PM with seconds
+        function formatIstTime(dateObj) {
+            try {
+                return dateObj.toLocaleTimeString('en-US', {
+                    timeZone: 'Asia/Kolkata',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                });
+            } catch (_) {
+                return dateObj.toLocaleTimeString('en-GB');
+            }
+        }
+
+        // Format Date object to exact IST Date (e.g. 25 Oct 2026)
+        function formatIstDate(dateObj) {
+            try {
+                return dateObj.toLocaleDateString('en-US', {
+                    timeZone: 'Asia/Kolkata',
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            } catch (_) {
+                return dateObj.toISOString().split('T')[0];
+            }
+        }
+
+        // Determine effective shift date in IST (00:00 - 07:00 belongs to previous day's shift C)
+        function getEffectiveShiftDateIST(dateObj = new Date()) {
+            try {
+                const istDateStr = new Intl.DateTimeFormat('en-CA', {
+                    timeZone: 'Asia/Kolkata',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                }).format(dateObj);
+
+                const istParts = new Intl.DateTimeFormat('en-US', {
+                    timeZone: 'Asia/Kolkata',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: false
+                }).formatToParts(dateObj);
+
+                let hour = 0, minutes = 0;
+                for (const part of istParts) {
+                    if (part.type === 'hour') hour = parseInt(part.value, 10);
+                    if (part.type === 'minute') minutes = parseInt(part.value, 10);
+                }
+                if (hour === 24) hour = 0;
+
+                if (hour < 7 || (hour === 7 && minutes === 0)) {
+                    const d = new Date(istDateStr + 'T12:00:00Z');
+                    d.setUTCDate(d.getUTCDate() - 1);
+                    return d.toISOString().split('T')[0];
+                }
+                return istDateStr;
+            } catch (_) {
+                return dateObj.toISOString().split('T')[0];
+            }
+        }
+
+        // Determine shift letter based on IST minutes of day (matches index.html exact plant rules)
+        function getShiftFromDate(dateObj) {
+            try {
+                const istParts = new Intl.DateTimeFormat('en-US', {
+                    timeZone: 'Asia/Kolkata',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: false
+                }).formatToParts(dateObj);
+
+                let hour = 0, minutes = 0;
+                for (const part of istParts) {
+                    if (part.type === 'hour') hour = parseInt(part.value, 10);
+                    if (part.type === 'minute') minutes = parseInt(part.value, 10);
+                }
+                if (hour === 24) hour = 0;
+                const m = hour * 60 + minutes;
+
+                if (m >= 421 && m <= 570) return 'A';  // 07:01 - 09:30 AM
+                if (m >= 571 && m <= 900) return 'G';  // 09:31 AM - 03:00 PM
+                if (m >= 901 && m <= 1380) return 'B'; // 03:01 PM - 11:00 PM
+                return 'C';                            // 11:01 PM - 07:00 AM
+            } catch (_) {
+                return 'B';
+            }
+        }
+
         async function fetchAndRenderLineSummary() {
             if (!activeLine) return;
             const refreshIcon = document.getElementById('refreshIcon');
             if (refreshIcon) refreshIcon.classList.add('fa-spin');
 
             try {
-                const targetDate = getEffectiveShiftDateIST();
-                
-                // Query attendance records from Supabase for this date
-                const queryUrl = `${CONFIG.supabase_url}/rest/v1/attendance?line=eq.${encodeURIComponent(activeLine)}&timestamp=gte.${targetDate}T00:00:00&order=id.desc&limit=50`;
+                const currentEffDate = getEffectiveShiftDateIST(new Date());
+
+                // Fetch latest 100 scans for this line from Supabase
+                const queryUrl = `${CONFIG.supabase_url}/rest/v1/attendance?line=eq.${encodeURIComponent(activeLine)}&order=id.desc&limit=100`;
                 const res = await fetch(queryUrl, {
                     headers: {
                         'apikey': CONFIG.supabase_key,
                         'Authorization': `Bearer ${CONFIG.supabase_key}`
-                    }
+                    },
+                    cache: 'no-store'
                 });
 
                 if (res.ok) {
-                    const records = await res.json();
+                    const allRecords = await res.json();
                     
+                    // Filter records matching TODAY'S EFFECTIVE SHIFT DATE
+                    const todayRecords = [];
                     let countA = 0, countG = 0, countB = 0, countC = 0;
                     const uniqueEmpSet = new Set();
 
-                    records.forEach(r => {
-                        uniqueEmpSet.add(r.emp_no);
-                        const t = r.timestamp || '';
-                        let hour = 12, min = 0;
-                        if (t.includes('T')) {
-                            const timePart = t.split('T')[1].split('+')[0].split('Z')[0];
-                            const hp = timePart.split(':');
-                            hour = parseInt(hp[0], 10);
-                            min = parseInt(hp[1] || '0', 10);
+                    allRecords.forEach(r => {
+                        const istDate = parseUtcToIst(r.timestamp);
+                        const recEffDate = getEffectiveShiftDateIST(istDate);
+
+                        if (recEffDate === currentEffDate) {
+                            todayRecords.push(r);
+                            uniqueEmpSet.add(r.emp_no);
+                            const shift = getShiftFromDate(istDate);
+                            if (shift === 'A') countA++;
+                            else if (shift === 'G') countG++;
+                            else if (shift === 'B') countB++;
+                            else if (shift === 'C') countC++;
                         }
-                        const m = hour * 60 + min;
-                        if (m >= 421 && m <= 570) countA++;
-                        else if (m >= 571 && m <= 900) countG++;
-                        else if (m >= 901 && m <= 1380) countB++;
-                        else countC++;
                     });
 
-                    document.getElementById('countTotal').textContent = uniqueEmpSet.size || records.length;
+                    // Update 5-column grid counters
+                    document.getElementById('countTotal').textContent = uniqueEmpSet.size;
                     document.getElementById('countShiftA').textContent = countA;
                     document.getElementById('countShiftG').textContent = countG;
                     document.getElementById('countShiftB').textContent = countB;
                     document.getElementById('countShiftC').textContent = countC;
 
-                    renderRecentScans(records);
+                    // Render recent scans list with accurate 12-hour IST time and shift pill
+                    renderRecentScans(todayRecords.length > 0 ? todayRecords : allRecords);
                 }
             } catch (err) {
                 console.warn('[OTS] Error fetching line summary:', err);
@@ -1231,22 +1421,31 @@
                 return;
             }
 
-            container.innerHTML = records.slice(0, 8).map(item => {
-                let timeStr = '--:--';
-                if (item.timestamp && item.timestamp.includes('T')) {
-                    timeStr = item.timestamp.split('T')[1].substring(0, 8);
-                }
+            container.innerHTML = records.slice(0, 10).map(item => {
+                const istDate = parseUtcToIst(item.timestamp);
+                const istTimeStr = formatIstTime(istDate);
+                const shiftLetter = getShiftFromDate(istDate);
+                const shiftBadgeClass = `shift-badge-${shiftLetter}`;
+
                 return `
                     <div class="transfer-emp-card">
-                        <div class="min-w-0 pr-2">
-                            <h4 class="text-xs font-black text-slate-800 truncate">${item.name || item.emp_no}</h4>
-                            <p class="text-[10px] text-slate-500 font-bold uppercase truncate">
-                                ID: ${item.emp_no} • ${item.department || 'Cell Production'}
-                            </p>
+                        <div class="flex items-center gap-2 min-w-0 pr-2">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 font-extrabold flex items-center justify-center text-[10px] flex-shrink-0">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <div class="min-w-0">
+                                <h4 class="text-xs font-black text-slate-800 truncate">${item.name || item.emp_no}</h4>
+                                <p class="text-[10px] text-slate-500 font-semibold truncate">
+                                    ${item.emp_no} • <span class="text-purple-700 font-bold">${item.line || activeLine}</span>
+                                </p>
+                            </div>
                         </div>
-                        <div class="text-right flex-shrink-0">
-                            <span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-100 text-slate-600 border border-slate-200">
-                                ${timeStr}
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <span class="${shiftBadgeClass} px-1.5 py-0.5 rounded text-[9px] font-black uppercase">
+                                Shift ${shiftLetter}
+                            </span>
+                            <span class="inline-block px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200 whitespace-nowrap">
+                                ${istTimeStr}
                             </span>
                         </div>
                     </div>`;
@@ -1263,6 +1462,220 @@
             initializeApp().finally(() => {
                 if (icon) setTimeout(() => icon.classList.remove('fa-spin'), 600);
             });
+        }
+
+        
+        // ========================================================
+        // 11. SUPABASE CLOUDFLARE TUNNEL REALTIME SYNC (15s Loop)
+        // ========================================================
+        let latestTunnelUrl = '';
+
+        async function fetchTunnelStatusFromSupabase() {
+            try {
+                const url = `${CONFIG.supabase_url}/rest/v1/tunnel_status?id=eq.1&select=*`;
+                const res = await fetch(url, {
+                    headers: {
+                        'apikey': CONFIG.supabase_key,
+                        'Authorization': `Bearer ${CONFIG.supabase_key}`
+                    },
+                    cache: 'no-store'
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.length > 0) {
+                        applyTunnelData(data[0]);
+                    }
+                }
+            } catch (err) {
+                console.warn('[OTS Tunnel] Sync error:', err);
+            }
+        }
+
+        function applyTunnelData(tunnel) {
+            if (!tunnel) return;
+            const isOnline = (tunnel.status || '').toUpperCase() === 'ONLINE';
+            const url = tunnel.scanner_url || tunnel.tunnel_url || '#';
+            latestTunnelUrl = url;
+            const host = tunnel.hostname || (tunnel.tunnel_url ? tunnel.tunnel_url.replace('https://', '') : 'Offline');
+
+            // 1. Hostname & Link
+            const linkEl = document.getElementById('tunnelDirectLink');
+            const hostEl = document.getElementById('tunnelHostnameText');
+            const subtextEl = document.getElementById('tunnelSubtext');
+
+            if (linkEl) {
+                linkEl.href = isOnline ? url : '#';
+            }
+            if (hostEl) {
+                hostEl.textContent = isOnline ? host : 'Tunnel Reconnecting...';
+            }
+            if (subtextEl) {
+                subtextEl.textContent = isOnline ? 'Tap to open live plant scanner' : 'Auto-healing in background via Supabase';
+            }
+
+            // 2. Status Badge
+            const badge = document.getElementById('tunnelStatusBadge');
+            const statusText = document.getElementById('tunnelStatusText');
+            if (badge && statusText) {
+                if (isOnline) {
+                    statusText.textContent = 'ONLINE';
+                    badge.className = 'inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-300';
+                } else {
+                    statusText.textContent = 'RECONNECTING';
+                    badge.className = 'inline-flex items-center gap-1 text-[9px] font-black px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-300';
+                }
+            }
+
+            // 3. Updated Time
+            const updEl = document.getElementById('tunnelUpdatedText');
+            if (updEl && tunnel.updated_at) {
+                const sec = Math.floor((Date.now() - new Date(tunnel.updated_at).getTime()) / 1000);
+                const timeText = sec < 60 ? `${sec}s ago` : `${Math.floor(sec / 60)}m ago`;
+                updEl.innerHTML = `<i class="fas fa-check-double text-emerald-500"></i><span>Active (${timeText})</span>`;
+            }
+        }
+
+        
+        // ========================================================
+        // 12. PLANT ALL LINES SUMMARY TABLE ENGINE (Exact index.html)
+        // ========================================================
+        async function fetchAllLinesSummaryFromSupabase() {
+            const spinIcon = document.getElementById('allLinesRefreshIcon');
+            if (spinIcon) spinIcon.classList.add('fa-spin');
+
+            try {
+                const currentEffDate = getEffectiveShiftDateIST(new Date());
+
+                // Fetch latest 1000 punches across all lines from Supabase
+                const url = `${CONFIG.supabase_url}/rest/v1/attendance?select=line,timestamp,emp_no&order=id.desc&limit=1000`;
+                const res = await fetch(url, {
+                    headers: {
+                        'apikey': CONFIG.supabase_key,
+                        'Authorization': `Bearer ${CONFIG.supabase_key}`
+                    },
+                    cache: 'no-store'
+                });
+
+                if (res.ok) {
+                    const allData = await res.json();
+                    
+                    // Aggregate by line (case-insensitive deduplication)
+                    const lineMap = {};
+                    const totalPlantEmps = new Set();
+                    let grandA = 0, grandG = 0, grandB = 0, grandC = 0;
+
+                    // Initialize all known lines so lines with 0 appear as in index.html
+                    const knownLines = CONFIG.lines || [
+                        "ALD", "Annealing", "BSG", "Boat Cleaning", "Diffusion", 
+                        "Oxidation", "PE-Poly", "PECVD", "PROJECTS", "PSG+RCA", 
+                        "Printer", "Texturing", "Training (Chikhli)"
+                    ];
+
+                    knownLines.forEach(l => {
+                        const standardKey = l.trim();
+                        lineMap[standardKey] = {
+                            line: standardKey,
+                            A: 0, G: 0, B: 0, C: 0,
+                            emps: new Set()
+                        };
+                    });
+
+                    allData.forEach(r => {
+                        const istDate = parseUtcToIst(r.timestamp);
+                        const recEffDate = getEffectiveShiftDateIST(istDate);
+
+                        if (recEffDate === currentEffDate) {
+                            const rawLine = (r.line || 'Unassigned').trim();
+                            // Match case-insensitively to standard known line
+                            let targetKey = rawLine;
+                            for (const k of Object.keys(lineMap)) {
+                                if (k.toUpperCase() === rawLine.toUpperCase()) {
+                                    targetKey = k;
+                                    break;
+                                }
+                            }
+
+                            if (!lineMap[targetKey]) {
+                                lineMap[targetKey] = {
+                                    line: targetKey,
+                                    A: 0, G: 0, B: 0, C: 0,
+                                    emps: new Set()
+                                };
+                            }
+
+                            lineMap[targetKey].emps.add(r.emp_no);
+                            totalPlantEmps.add(r.emp_no);
+
+                            const shift = getShiftFromDate(istDate);
+                            if (shift === 'A') { lineMap[targetKey].A++; grandA++; }
+                            else if (shift === 'G') { lineMap[targetKey].G++; grandG++; }
+                            else if (shift === 'B') { lineMap[targetKey].B++; grandB++; }
+                            else if (shift === 'C') { lineMap[targetKey].C++; grandC++; }
+                        }
+                    });
+
+                    renderAllLinesTable(lineMap, totalPlantEmps.size, grandA, grandG, grandB, grandC);
+                }
+            } catch (err) {
+                console.warn('[OTS All Lines] Fetch error:', err);
+            } finally {
+                if (spinIcon) spinIcon.classList.remove('fa-spin');
+            }
+        }
+
+        function renderAllLinesTable(lineMap, totalEmps, grandA, grandG, grandB, grandC) {
+            const tbody = document.getElementById('allLinesTableBody');
+            if (!tbody) return;
+
+            const sortedKeys = Object.keys(lineMap).sort((a, b) => a.localeCompare(b));
+            let html = '';
+
+            sortedKeys.forEach(k => {
+                const item = lineMap[k];
+                const lineTotal = item.emps.size;
+                const isSelected = activeLine && (k.toUpperCase() === activeLine.toUpperCase());
+                const rowBg = isSelected ? 'bg-purple-50/70 border-l-4 border-l-[#820c59]' : 'hover:bg-slate-50';
+
+                html += `
+                    <tr class="${rowBg} transition cursor-pointer" onclick="selectLineFromTable('${item.line}')">
+                        <td class="py-1.5 px-2.5 font-extrabold text-slate-800 truncate max-w-[120px]">
+                            ${item.line}
+                            ${isSelected ? '<span class="ml-1 text-[9px] text-[#820c59] font-black">●</span>' : ''}
+                        </td>
+                        <td class="py-1.5 px-1 text-center font-bold text-blue-700">${item.A}</td>
+                        <td class="py-1.5 px-1 text-center font-bold text-purple-700">${item.G}</td>
+                        <td class="py-1.5 px-1 text-center font-bold text-emerald-700">${item.B}</td>
+                        <td class="py-1.5 px-1 text-center font-bold text-amber-700">${item.C}</td>
+                        <td class="py-1.5 px-2 text-center font-black ${lineTotal > 0 ? 'text-[#820c59] bg-purple-100/40' : 'text-slate-400'}">
+                            ${lineTotal}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+
+            // Update footer totals
+            document.getElementById('plantTotalPresentBadge').textContent = totalEmps;
+            document.getElementById('footShiftA').textContent = grandA;
+            document.getElementById('footShiftG').textContent = grandG;
+            document.getElementById('footShiftB').textContent = grandB;
+            document.getElementById('footShiftC').textContent = grandC;
+            document.getElementById('footGrandTotal').textContent = totalEmps;
+        }
+
+        // Tap row to switch active line effortlessly
+        function selectLineFromTable(lineName) {
+            const select = document.getElementById('lineSelect');
+            if (select) {
+                select.value = lineName;
+                activeLine = lineName;
+                localStorage.setItem(LOCAL_STORAGE_LINE_KEY, lineName);
+                updateLineBadges(lineName, false);
+                fetchAndRenderLineSummary();
+                fetchAllLinesSummaryFromSupabase();
+            }
         }
 
         window.addEventListener('DOMContentLoaded', initializeApp);
